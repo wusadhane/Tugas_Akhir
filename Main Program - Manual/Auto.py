@@ -34,7 +34,8 @@ def View():
         main_table.delete(row)
     
     for i in range(kombinasi_portofolio):
-        print(biaya)   
+        print(biaya)
+        
         # Pilih secara acak aset-aset dari list
         selected_assets = random.sample(list, emitens)
         print(selected_assets)
@@ -50,6 +51,8 @@ def View():
             harga_terbaru,
         ) = kalkulasi(selected_assets, biaya)
         
+        
+        print(lot)
         expectedReturn = round(expectedReturn, 2)
         volatility = round(volatility, 2)
         sharpeRatio = round(sharpeRatio, 2)
@@ -59,9 +62,44 @@ def View():
             values=(i+1, ", ".join(selected_assets), expectedReturn, volatility, sharpeRatio))
 
 
-
 # fungsi untuk menampilkan detail portofolio
+def details():
+    # ambil data dari tabel
+    selected_item = main_table.focus()
+    if not selected_item:
+        messagebox.showerror("Ups!", "Kamu belum pilih portofolionya.")
+        return
 
+    # Retrieve values of the selected row
+    values = main_table.item(selected_item, "values")
+    if not values:
+        messagebox.showerror("Error", "Tidak ada data yang ditemukan untuk portofolio yang dipilih.")
+        return
+
+    # ambil nomor portofolio
+    portofolio_nomor = values[0]
+
+    # tampilkan detil portofolio
+    detail_message = f"Portfolio: {values[0]}\nEmiten: {values[1]}\nExpected Return: {values[2]}\nRisk: {values[3]}\nSharpe Ratio: {values[4]}\n"
+
+    # ambil informasi tambahan dari hasil optimasi
+    selected_assets = values[1].split(", ")
+    biaya = int(dana.get())
+
+    (
+        anggaran,
+        lot,
+        sisaUang,
+        persensaham,
+        expectedReturn,
+        volatility,
+        sharpeRatio,
+        harga_terbaru,
+    ) = kalkulasi(selected_assets, biaya)
+
+    detail_message += f"\nLot: {lot}\nAnggaran: {anggaran}\n\nProporsi Dana(%) :  {persensaham}\n\nSisa Uang: {sisaUang}\nHarga Terbaru: \n{harga_terbaru}"
+    
+    messagebox.showinfo("Portfolio Details", detail_message)
 
 # -------------------------------/FUNCTION---------------------------
 
@@ -70,7 +108,8 @@ def View():
 # main window
 main = tk.Tk()
 main.title("Optimasi Saham Martkowiz - Auto")
-main.geometry("1290x650")
+main.geometry("1080x450")
+
 
 # ---------------------------------Input 1------------------------------
 
@@ -127,12 +166,8 @@ hapus.place(
 
 # ---------------------------------BUTTON_DETAIL------------------------------
 
-# tombol hapus
-hapus = Button(text="Detail portofolio")
-hapus.place(
-    x=250,
-    y=300,
-)
+detail_button = Button(text="Detail Portofolio", command=details)
+detail_button.place(x=250, y=300)
 
 # ---------------------------------/BUTTON_DETAIL------------------------------
 
