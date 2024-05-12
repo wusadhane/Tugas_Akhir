@@ -13,9 +13,6 @@ from emiten import list
 
 # deklarasi global variable buat saham
 emitenYangDicari = []
-# -------------------------------DATABASE---------------------------
-
-# -------------------------------/DATABASE---------------------------
 
 # -------------------------------FUNCTION---------------------------
 
@@ -31,7 +28,10 @@ def View():
     kombinasi_portofolio = int(kombinasi.get())
     emitens = int(saham.get())
     biaya = int(dana.get())
-    
+
+    # hapus tabel jika ada data
+    for row in main_table.get_children():
+        main_table.delete(row)
     
     for i in range(kombinasi_portofolio):
         print(biaya)   
@@ -40,43 +40,30 @@ def View():
         print(selected_assets)
         
         (
-        anggaran,
-        lot,
-        sisaUang,
-        persensaham,
-        expectedReturn,
-        volatility,
-        sharpeRatio,
-        harga_terbaru,
+            anggaran,
+            lot,
+            sisaUang,
+            persensaham,
+            expectedReturn,
+            volatility,
+            sharpeRatio,
+            harga_terbaru,
         ) = kalkulasi(selected_assets, biaya)
         
-    for datas in main_table.get_children():
-        datanya = main_table.item(datas, "values")
-        main_table.item(
-            datas,
-            text="",
-            values=(
-                datanya[0],
-                datanya[1],
-                datanya[2],
-                datanya[3],
-                harga_terbaru[datanya[3] + ".JK"],
-                f'Rp.{anggaran[datanya[3]+".JK"]}',
-                f'{persensaham[datanya[3]+".JK"]}%',
-                f'{lot[datanya[3]+".JK"]}',
-            ),
-        )
+        expectedReturn = round(expectedReturn, 2)
+        volatility = round(volatility, 2)
+        sharpeRatio = round(sharpeRatio, 2)
 
-    print(
-        anggaran,
-        lot,
-        sisaUang,
-        persensaham,
-        expectedReturn,
-        volatility,
-        sharpeRatio,
-        harga_terbaru,)
-    
+        # masukin hasil optimasi ke tabel
+        main_table.insert("", "end", text="",
+            values=(i+1, ", ".join(selected_assets), expectedReturn, volatility, sharpeRatio))
+
+
+
+# fungsi untuk menampilkan detail portofolio
+
+
+# -------------------------------/FUNCTION---------------------------
 
 # ---------------------------------GUI------------------------------
 
