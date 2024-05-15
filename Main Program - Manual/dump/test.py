@@ -104,15 +104,8 @@ def details():
     
     messagebox.showinfo("Portfolio Details", detail_message)
 
-# Fungsi untuk perangkingan portofolio berdasarkan Expected Return
-def rank():
-    # Ambil target expected return dari input
-    try:
-        target_return = float(target_return_entry.get())
-    except ValueError:
-        messagebox.showerror("Error", "Silakan masukkan nilai target expected return yang valid.")
-        return
-    
+# Fungsi untuk perangkingan portofolio berdasarkan Sharpe Ratio
+def rank_portfolios():
     # Ambil semua data dari tabel
     rows = main_table.get_children()
     if not rows:
@@ -125,8 +118,8 @@ def rank():
         values = main_table.item(row, "values")
         portfolio_data.append(values)
 
-    # Sort berdasarkan Expected Return (index ke-2 dari setiap item)
-    portfolio_data.sort(key=lambda x: abs(target_return - float(x[2])))
+    # Sort berdasarkan Sharpe Ratio (index ke-4 dari setiap item)
+    portfolio_data.sort(key=lambda x: float(x[4]), reverse=True)
 
     # Update tabel dengan data yang sudah dirangking
     for i, data in enumerate(portfolio_data):
@@ -139,7 +132,8 @@ def rank():
 # main window
 main = tk.Tk()
 main.title("Optimasi Saham Martkowiz - Auto")
-main.geometry("1080x550")
+main.geometry("1080x450")
+
 
 # ---------------------------------Input 1------------------------------
 
@@ -176,26 +170,23 @@ main_frame.place(
 kombinasi = Entry(main_frame, width=25)
 kombinasi.grid(row=0, column=1, padx=10, pady=10)
 
-# ---------------------------------Input 4------------------------------
-
-# Input Target Expected Return
-main_frame = LabelFrame(main, text="Target Expected Return", font=("roboto", 12))
-main_frame.place(
-    x=50,
-    y=350,
-)
-
-target_return_entry = Entry(main_frame, width=25)
-target_return_entry.grid(row=0, column=1, padx=10, pady=10)
-
 # ---------------------------------BUTTON_PROSES------------------------------
 
 # Tombol Proses
 optimasi = Button(text="Process", command=View)
 optimasi.place(
     x=50,
-    y=450,
+    y=350,
 )
+
+# ---------------------------------BUTTON_HAPUS------------------------------
+
+# # tombol hapus
+# hapus = Button(text="Clear Table")
+# hapus.place(
+#     x=360,
+#     y=300,
+# )
 
 # ---------------------------------BUTTON_DETAIL------------------------------
 
@@ -205,8 +196,8 @@ detail_button.place(x=250, y=300)
 # ---------------------------------BUTTON_RANK------------------------------
 
 # Tombol untuk meranking portofolio
-rank_button = Button(text="Rank Portfolios by Expected Return", command=rank)
-rank_button.place(x=250, y=350)
+rank_button = Button(text="Rank Portfolios", command=rank_portfolios)
+rank_button.place(x=360, y=300)
 
 # ---------------------------------/BUTTON_RANK------------------------------
 
