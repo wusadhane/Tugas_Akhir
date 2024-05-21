@@ -9,15 +9,15 @@ from dateutil.relativedelta import relativedelta
 
 # saham = ["NFCX", "MLPT"]
 
-start = datetime.now()
-end = start - relativedelta(years=1)
+end = datetime(2024, 5, 17)
+start = end - relativedelta(years=1)
 print(start)
 print(end)
 
 
 def kalkulasi(saham, biaya):
     saham = [stock + ".JK" for stock in saham]
-    get_saham = yf.download(saham, start=end, end=start)
+    get_saham = yf.download(saham, start=start, end=end)
     harga = get_saham["Close"].dropna(how="all")
     mu = mean_historical_return(harga)
     cov = CovarianceShrinkage(harga).ledoit_wolf()

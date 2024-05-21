@@ -99,7 +99,7 @@ def details():
         sharpeRatio,
         harga_terbaru,
     ) = kalkulasi(selected_assets, biaya)
-
+    
     detail_message += f"\nLot: {lot}\nAnggaran: {anggaran}\n\nProporsi Dana(%) :  {persensaham}\n\nSisa Uang: {sisaUang}\nHarga Terbaru: \n{harga_terbaru}"
     
     messagebox.showinfo("Portfolio Details", detail_message)
