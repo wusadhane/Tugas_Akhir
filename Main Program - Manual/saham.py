@@ -10,7 +10,8 @@ from dateutil.relativedelta import relativedelta
 # saham = ["NFCX", "MLPT"]
 
 end = datetime(2024, 5, 17)
-start = end - relativedelta(years=1)
+start = datetime(2023,5,17)
+# start = end - relativedelta(years=1)
 print(start)
 print(end)
 
